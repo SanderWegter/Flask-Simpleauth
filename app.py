@@ -48,7 +48,7 @@ def index():
 		message = notifications
 		notifications = None
 	if 'username' not in session:
-		message = {'message': 'Please log in': 'type': 'warning'}
+		message = {'message': 'Please log in', 'type': 'warning'}
 		return redirect(url_for('login'))
 	return render_template('index.html',session=session,message=message)
 
