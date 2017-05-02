@@ -139,9 +139,8 @@ def register():
 		else:
 			message = {'message': 'Something went wrong: '+result, 'type': 'error'}
 			return render_template('register.html', message=message)
-	if 'username' in session:
-		if session['username'] == 'admin':
-			return render_template('register.html', message=message)
+	if 'username' in session and session['username'] == 'admin':
+		return render_template('register.html', message=message)
 	if config['registration_enabled']:
 		return render_template('register.html', message=message)
 	else:
