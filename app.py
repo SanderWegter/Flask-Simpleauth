@@ -118,7 +118,7 @@ if __name__ == '__main__':
 		)
 	else:
 		app.run(
-			host=config['serverIP'],
-			port=config['serverPort'],
+			host=config['server_ip'],
+			port=config['server_ip'],
 			debug=config['debug']
 		)
