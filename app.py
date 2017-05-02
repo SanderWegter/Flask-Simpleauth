@@ -77,14 +77,19 @@ def editUser(user):
 
 @app.route('/users/delete/<user>')
 def delUser(user):
+	global notifications
 	if 'username' not in session:
-		return redirect(url_for('login', message="Please log in"))
+		notifications = {'message': 'Please log in', 'type': 'warning'}
+		return redirect(url_for('login'))
 	if session['username'] != 'admin':
-		return redirect(url_for('index', message="Admin only page"))
+		notifications = {'message': 'Admin only page', 'type': 'error'}
+		return redirect(url_for('index'))
 
 	result = Users.deleteUser(db,user)
 	if not result:
+		notifications = {'message': 'User deleted successfully', 'type': 'success'}
 		return redirect(url_for('users', message="User deleted successfully"))
+	notifications = {'message': 'Something went wrong: '+result, 'type': 'error'}
 	return redirect(url_for('users', message="Something went wrong: "+result))
 
 @app.route('/login', methods=['GET', 'POST'])
