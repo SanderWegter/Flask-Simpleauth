@@ -109,6 +109,7 @@ def login():
 
 @app.route('/logout')
 def logout():
+	global notifications
 	if 'username' not in session:
 		return redirect(url_for('login'))
 	session.pop('username', None)
@@ -126,7 +127,10 @@ def register():
 		result = Users.registerUser(db, request.form, config['pw_rounds'])
 		if not result:
 			notifications = {'message': 'Registration successful', 'type': 'success'}
-			return redirect(url_for('index',message='Registration successful'))
+			if session['username'] == 'admin':
+				return redirect(url_for('register'))
+			else:
+				return redirect(url_for('login'))
 		else:
 			message = {'message': 'Something went wrong: '+result, 'type': 'error'}
 			return render_template('register.html', message=message)
