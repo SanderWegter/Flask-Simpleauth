@@ -37,23 +37,33 @@ if __name__ == '__main__':
 	execfile("config.conf",config)
 	app.secret_key = config['app_key']
 	db = DB()
+	notifications = None
 
 #Routes
 @app.route('/')
 def index():
+	message = None
+	global notifications
+	if notifications:
+		message = notifications
+		notifications = None
 	if 'username' not in session:
-		return redirect(url_for('login', message='Please log in'))
-	return render_template('index.html',session=session)
+		message = {'message': 'Please log in': 'type': 'warning'}
+		return redirect(url_for('login'))
+	return render_template('index.html',session=session,message=message)
 
 @app.route('/users')
 def users():
+	global notifications
 	if 'username' not in session:
-		return redirect(url_for('login', message="Please log in"))
+		notifications = {'message': 'Please log in', 'type': 'warning'}
+		return redirect(url_for('login'))
 	if session['username'] != 'admin':
 		return redirect(url_for('index', message="Admin only page"))
 
 	users = Users.getUsers(db)
 	if not users:
+		message = 
 		return render_template('users.html', message="Failed to retrieve users")
 	return render_template('users.html', users=users)
 
@@ -75,36 +85,52 @@ def delUser(user):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+	message = None
+	global notifications
+	if notifications:
+		message = notifications
+		notifications = None
 	if 'username' in session:
 		return redirect(url_for('index'))
 
 	if request.method == 'POST':
 		result = Users.loginForm(db, request.form)
 		if not result:
+			notifications = {'message': 'Logged in', 'type': 'success'}
 			return redirect(url_for('index'))
 		else:
-			return render_template('login.html', message="Failed to log in")
-	return render_template('login.html')
+			message = {'message': 'Failed to log in', 'type': 'error'}
+			return render_template('login.html', message=message)
+	return render_template('login.html',message=message)
 
 @app.route('/logout')
 def logout():
 	if 'username' not in session:
 		return redirect(url_for('login'))
 	session.pop('username', None)
+	notifications = {'message': 'Logged out', 'type': 'success'}
 	return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET','POST'])
 def register():
+	message = None
+	global notifications
+	if notifications:
+		message = notifications
+		notifications = None
 	if request.method == 'POST':
 		result = Users.registerUser(db, request.form, config['pw_rounds'])
 		if not result:
+			notifications = {'message': 'Registration successful', 'type': 'success'}
 			return redirect(url_for('index',message='Registration successful'))
 		else:
-			return render_template('register.html', message="Something went wrong: "+result)
+			message = {'message': 'Something went wrong: '+result, 'type': 'error'}
+			return render_template('register.html', message=message)
 	if config['registration_enabled']:
 		return render_template('register.html')
 	else:
-		return redirect(url_for('login', message="User registration is disabled by the admin"))
+		notifications = {'message': 'User registration is disabled by the admin', 'type': 'warning'}
+		return redirect(url_for('login'))
 
 #Run app
 if __name__ == '__main__':
