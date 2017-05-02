@@ -43,7 +43,7 @@ if __name__ == '__main__':
 def index():
 	if 'username' not in session:
 		return redirect(url_for('login', message='Please log in'))
-	return render_template('index.html'session=session)
+	return render_template('index.html',session=session)
 
 @app.route('/users')
 def users():
