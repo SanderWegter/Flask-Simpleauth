@@ -1,0 +1,19 @@
+server_ip = '0.0.0.0'
+server_port = 54321
+
+db_host = ''
+db_user = ''
+db_pass = ''
+db_data = ''
+
+app_key = 'SomeRandomStringHere'
+
+registration_enabled = True
+
+debug = True
+
+ssl = False
+ssl_key = ''
+ssl_crt = ''
+
+pw_rounds = 10

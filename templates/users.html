@@ -1,0 +1,28 @@
+{% extends 'layout.html' %} {% block body %}
+<section class="content">
+    <div class="container" style="margin-top:50px;">
+        <div class="row">
+            <div class="col-md-6">
+                {% if users %}
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Options</th>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td><a href="/users/edit/{{ user.name }}"><button class="btn btn-info btn-xs">Edit</button></a> <a href="/users/delete/{{ user.name }}"><button class='btn btn-danger btn-xs'>Delete</button></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

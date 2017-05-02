@@ -1,0 +1,13 @@
+{% extends 'layout.html' %} {% block body %}
+<section class="content">
+    <div class="container" style="margin-top:50px;">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-2">
+                {% if session.username %}
+                    <p>Hello <b>{{ session.username }}</b></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
