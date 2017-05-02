@@ -15,7 +15,7 @@
                         <tr>
                             <td>{{ user.name }}</td>
                             <td>{{ user.email }}</td>
-                            <td><a href="/users/edit/{{ user.name }}"><button class="btn btn-info btn-xs">Edit</button></a> <a href="/users/delete/{{ user.name }}"><button class='btn btn-danger btn-xs'>Delete</button></a></td>
+                            <td><a href="/users/edit/{{ user.name }}"><button class="btn btn-info btn-xs">Edit</button></a> {% if user.name != 'admin' %}<a href="/users/delete/{{ user.name }}"><button class='btn btn-danger btn-xs'>Delete</button></a>{% endif %}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
