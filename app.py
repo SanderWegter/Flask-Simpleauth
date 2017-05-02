@@ -139,7 +139,10 @@ def register():
 		else:
 			message = {'message': 'Something went wrong: '+result, 'type': 'error'}
 			return render_template('register.html', message=message)
-	if config['registration_enabled'] or session['username'] == 'admin':
+	if 'username' in session:
+		if session['username'] == 'admin':
+			return render_template('register.html', message=message)
+	if config['registration_enabled']:
 		return render_template('register.html', message=message)
 	else:
 		notifications = {'message': 'User registration is disabled by the admin', 'type': 'warning'}
