@@ -143,7 +143,7 @@ def register():
 		return render_template('register.html', message=message)
 	else:
 		notifications = {'message': 'User registration is disabled by the admin', 'type': 'warning'}
-		return redirect(url_for('login'))
+		return redirect(url_for('index'))
 
 #Run app
 if __name__ == '__main__':
