@@ -54,7 +54,11 @@ def index():
 
 @app.route('/users')
 def users():
+	message = None
 	global notifications
+	if notifications:
+		message = notifications
+		notifications = None
 	if 'username' not in session:
 		notifications = {'message': 'Please log in', 'type': 'warning'}
 		return redirect(url_for('login'))
@@ -63,9 +67,9 @@ def users():
 
 	users = Users.getUsers(db)
 	if not users:
-		message = 
-		return render_template('users.html', message="Failed to retrieve users")
-	return render_template('users.html', users=users)
+		notifications = {'message': 'Failed to retrieve users', 'type': 'error'}
+		return render_template('users.html', message=message)
+	return render_template('users.html', users=users, message=message)
 
 @app.route('/users/edit/<user>')
 def editUser(user):
